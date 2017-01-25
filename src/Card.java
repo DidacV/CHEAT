@@ -60,26 +60,31 @@ public class Card implements Serializable, Comparable<Card>{
         return card1.getRank().value - card2.getRank().value;
     }
     
+    public static class CompareSuit implements Comparator<Card>{
+        @Override
+        public int compare(Card c1, Card c2){
+            int flag = c1.getSuit().compareTo(c2.getSuit());
+            if (flag== 0)
+                flag = c1.getRank().compareTo(c2.getRank());
+            return flag;
+        }
+    }
+    
     public static class CompareDescending implements Comparator<Card>{
         @Override
-        public int compare(Card card1, Card card2){
-            CompareSuit cs = new CompareSuit();
-            return cs.compare(card1, card2);
-            //return card1.getRank().ordinal() - card2.getRank().ordinal();
-        }
-        public static class CompareSuit implements Comparator<Card>{
-            @Override
-            public int compare(Card card1, Card card2){
-                return card1.getSuit().ordinal() - card2.getRank().ordinal();
-            }
+        public int compare(Card c1, Card c2){
+            return -1 * c1.compareTo(c2);
         }
     }
     
     @Override
     public int compareTo (Card card){
-        CompareDescending cd = new CompareDescending();
-        cd.
-        cd.compare(this, card);
+          int flag = 0;
+          flag = this.getRank().compareTo(card.getRank());
+          if (flag == 0)
+              flag = this.getSuit().compareTo(card.getSuit());
+          
+          return flag;
     }
     
     @Override

@@ -1,4 +1,3 @@
-import solution_part2.*;
 
 public interface CardGame {
 /**

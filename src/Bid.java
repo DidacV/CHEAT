@@ -1,4 +1,4 @@
-import solution_part2.*;
+package cheat;
 
 public class Bid {
 		Hand h;
