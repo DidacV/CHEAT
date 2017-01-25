@@ -1,5 +1,3 @@
-package question2;
-
 import solution_part2.*;
 
 public interface Player {
