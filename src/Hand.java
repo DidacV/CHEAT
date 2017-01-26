@@ -15,16 +15,22 @@ import java.util.Collection;
  */
 public class Hand implements Serializable{
     static final long serialVersionUID = 102;
-    private ArrayList<Card> hand;
-    private int[][] count;
+    private ArrayList<Card> hand = new ArrayList<Card>();;
+    private int[] countRank = new int[13];
+    private int[] countSuit = new int [4];
     
     public Hand(){
         hand = new ArrayList<Card>();
     }
     
     public Hand(Card[] cards){
-        for (Card c : cards){
-            hand.add(c);
+        for (int i = 0; i < cards.length; i++){
+            hand.add(cards[i]);
+        }
+        
+        for (int i = 0; i < hand.size(); i++){
+            countRank[hand.get(i).rank.ordinal()]++;
+            countSuit[hand.get(i).suit.ordinal()]++;
         }
     }
     
