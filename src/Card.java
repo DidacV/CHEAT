@@ -64,7 +64,7 @@ public class Card implements Serializable, Comparable<Card>{
         @Override
         public int compare(Card c1, Card c2){
             int flag = c1.getSuit().compareTo(c2.getSuit());
-            if (flag== 0)
+            if (flag == 0)
                 flag = c1.getRank().compareTo(c2.getRank());
             return flag;
         }

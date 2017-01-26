@@ -1,0 +1,9 @@
+cheat.Card$CompareDescending$CompareSuit
+cheat.Card$Rank
+cheat.Card$desCend
+cheat.Card$Suit
+cheat.Card$CompareDescending
+cheat.Card
+cheat.Card$CompareDescending$desCend
+cheat.Card$CompareSuit
+cheat.Card$nClass
