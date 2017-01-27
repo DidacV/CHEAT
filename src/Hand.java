@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cheat;
 
 import java.io.Serializable;
@@ -17,22 +12,26 @@ import java.util.Iterator;
  */
 public class Hand implements Serializable, Iterable<Card>{
     static final long serialVersionUID = 102;
-    private ArrayList<Card> hand = new ArrayList<Card>();
-    private Iterator<Card> iterator = hand.iterator();
-    private int[][] count = new int[13][4];
+    private ArrayList<Card> cards = null;
+    private final Iterator<Card> iterator = cards.iterator();
+    private final int[][] count = new int[13][4];
     private int total = 0;
     
     public Hand(){
-        hand = new ArrayList<Card>();
+        cards = new ArrayList<Card>();
     }
     
+    /**
+     * Constructs this hand with an array of given cards
+     * @param cards 
+     */
     public Hand(Card[] cards){
         for (int i = 0; i < cards.length; i++){
-            hand.add(cards[i]);
+            this.cards.add(cards[i]);
         }
         
         // Update count
-        for (Card c : hand){
+        for (Card c : cards){
             count[c.rank.ordinal()][c.suit.ordinal()]++;
             // Update total
             total += c.getRank().value;
@@ -40,90 +39,121 @@ public class Hand implements Serializable, Iterable<Card>{
     }
     
     /**
-     * Copies a given hand to this hand
+     * Constructs this hand copying the cards
+     * of a given hand to this hand
      * @param h 
      */
     public Hand(Hand h){
-        for (Card c : h.hand){
-            this.hand.add(c);
+        for (Card c : h.cards){
+            this.cards.add(c);
         }
         
         // Update count
-        for (Card c : hand){
+        for (Card c : cards){
             count[c.rank.ordinal()][c.suit.ordinal()]++;
             // Update total
             total += c.getRank().value;
         }
     }
     
+    /**
+     * Adds a single card to this hand
+     * @param c 
+     */
     public void add(Card c){
-        this.hand.add(c);
+        this.cards.add(c);
         // Update count
-        for (Card c1 : hand){
-            count[c1.rank.ordinal()][c1.suit.ordinal()]++;
+        for (Card card : cards){
+            count[card.rank.ordinal()][card.suit.ordinal()]++;
             // Update total
-            total += c.getRank().value;
+            total += card.getRank().value;
         }
     }
     
+    /**
+     * Adds a list of cards to this hand
+     * @param c 
+     */
     public void add(Collection<Card> c){
         for (Card card : c){
-            this.hand.add(card);
+            this.cards.add(card);
         }
         
         // Update count
-        for (Card c1 : hand){
+        for (Card c1 : cards){
             count[c1.rank.ordinal()][c1.suit.ordinal()]++;
             // Update total
             total += c1.getRank().value;
         }
     }
     
+    /**
+     * Adds the cards of a given hand to this hand
+     * @param h 
+     */
     public void add(Hand h){
-        for (Card c : h.hand){
-            this.hand.add(c);
+        for (Card c : h.cards){
+            this.cards.add(c);
         }
         
         // Update count
-        for (Card c1 : hand){
-            count[c1.rank.ordinal()][c1.suit.ordinal()]++;
-            // Update total
-            total += c1.getRank().value;
-        }
-    }
-    
-    public boolean remove(Card c){
-        for (Card card : this.hand){
-            if (c.equals(card))
-                this.hand.remove(c);
-        }
-        
-        // Update count
-        for (Card c1 : hand){
-            count[c1.rank.ordinal()][c1.suit.ordinal()]++;
-            // Update total
-            total += c.getRank().value;
-        }
-        return false;
-    }
-    
-    public boolean remove(Hand h){
-        h.hand.clear();
-        
-        // Update count
-        for (Card c : hand){
+        for (Card c : cards){
             count[c.rank.ordinal()][c.suit.ordinal()]++;
             // Update total
             total += c.getRank().value;
         }
-        return false;
     }
     
-    public void remove(int index){
-        this.hand.remove(index);
+    /**
+     * Removes a given card from the hand
+     * @param c
+     * @return true if the card given has been removed
+     *         false otherwise
+     */
+    public boolean remove(Card c){
+        for (Card card : this.cards){
+            if (!c.equals(card)) return false;
+            else this.cards.remove(c);
+        }
         
         // Update count
-        for (Card c : hand){
+        for (Card card : cards){
+            count[card.rank.ordinal()][card.suit.ordinal()]++;
+            // Update total
+            total += card.getRank().value;
+        }
+        return true;
+    }
+    
+    /**
+     * Remove all cards from the hand passed
+     * @param h
+     * @return true if all cards were removed
+     *         false otherwise
+     */
+    public boolean remove(Hand h){
+        h.cards.clear();
+        if (h.cards.size() != 0)
+            return false;
+        
+        // Update count
+        for (Card c : cards){
+            count[c.rank.ordinal()][c.suit.ordinal()]++;
+            // Update total
+            total += c.getRank().value;
+        }
+        return true;
+    }
+    
+    /**
+     * Removes a card at a specific position in the hand
+     * @param index 
+     */
+    public void remove(int index){
+        this.cards.remove(index);
+        
+        // Update count
+        for (Card c : cards){
             count[c.rank.ordinal()][c.suit.ordinal()]++;
             // Update total
             total += c.getRank().value;
@@ -142,28 +172,30 @@ public class Hand implements Serializable, Iterable<Card>{
 //    }
     
     /**
-     * 
+     * Sorts hand into ascending order
+     * It uses Card compareTo
      */
     public void sortAscending(){
-        Collections.sort(this.hand);
+        Collections.sort(this.cards);
     }
     
     /**
-     * 
+     * Sorts hand into descending order
+     * It uses Card compareTo
      */
     public void sortDescending(){
         Card.CompareDescending cs = new Card.CompareDescending();
-        this.hand.sort(cs);
+        this.cards.sort(cs);
     }
     
     /**
-     * 
+     * Counts the amount of cards with the same given suit
      * @param s
-     * @return 
+     * @return Amount of cards in hand of given suit
      */
     public int countSuit(Card.Suit s){
         int count = 0;
-        for (Card c : this.hand){
+        for (Card c : this.cards){
             if (c.suit == s)
                 count++;
         }
@@ -171,13 +203,13 @@ public class Hand implements Serializable, Iterable<Card>{
     } 
     
     /**
-     * 
+     * Counts the amount of cards with the same given rank
      * @param r
-     * @return 
+     * @return Amount of cards in hand of given rank
      */
     public int countRank(Card.Rank r){
         int count = 0;
-        for (Card c : this.hand){
+        for (Card c : this.cards){
             if (c.rank == r)
                 count++;
         }
@@ -185,40 +217,25 @@ public class Hand implements Serializable, Iterable<Card>{
     }
     
     /**
-     * 
-     * @return 
+     * Adds the ranks of the cards in the hand
+     * @return Total rank values of the cards
      */
     public int handValue(){
         int total = 0;
-        for(Card c : hand){
+        for(Card c : cards){
             total += c.rank.value;
         }
         return total;
     }
-    
+
     /**
-     * 
-     * @return 
-     */
-    @Override
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("This hand contains: ");
-        for (Card c : this.hand){
-            sb.append(c.toString()).append("\n");
-        }
-        sb.append("_____________________");
-        return sb.toString();
-    }
-    
-    /**
-     * 
-     * @return 
+     * Check to see if the hand is the same suit
+     * @return true if it's flush
      */
     public boolean isFlush(){
-        for (Card c : this.hand){
+        for (Card c : this.cards){
             // Compare each card's suit to the first one
-            if (c.suit == this.hand.get(0).suit)
+            if (c.suit == this.cards.get(0).suit)
                 return true;
         }
         return false;
@@ -233,4 +250,20 @@ public class Hand implements Serializable, Iterable<Card>{
     public boolean isStraight(){
         
     }
+    
+    /**
+     * Displays the cards in the hand
+     * @return Cards in the hand
+     */
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("This hand contains: ");
+        for (Card c : this.cards){
+            sb.append(c.toString()).append("\n");
+        }
+        sb.append("_____________________");
+        return sb.toString();
+    }
+    
 }
