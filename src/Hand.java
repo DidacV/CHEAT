@@ -12,7 +12,7 @@ import java.util.Iterator;
  */
 public class Hand implements Serializable, Iterable<Card>{
     static final long serialVersionUID = 102;
-    private ArrayList<Card> cards = null;
+    protected ArrayList<Card> cards = null;
     private final Iterator<Card> iterator = cards.iterator();
     private final int[][] count = new int[13][4];
     private int total = 0;
@@ -162,14 +162,15 @@ public class Hand implements Serializable, Iterable<Card>{
 /* *
     TODO : ITERATOR 
     */
-//    @Override
-//    public Iterator<Card> iterator() {
-//        
-//        while (iterator.hasNext()){
-//            
-//            iterator.next();
-//        }
-//    }
+    @Override
+    public Iterator<Card> iterator() {
+        
+        while (iterator.hasNext()){
+            
+            iterator.next();
+        }
+        return iterator;
+    }
     
     /**
      * Sorts hand into ascending order
@@ -248,7 +249,7 @@ public class Hand implements Serializable, Iterable<Card>{
      * @return true if all cards are in consecutive order
      */
     public boolean isStraight(){
-        
+        return false;
     }
     
     /**
