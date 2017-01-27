@@ -15,15 +15,17 @@ public class DeckTest {
         Deck d = new Deck();
         Card.CompareDescending cs = new Card.CompareDescending();
         
-        Card c = new Card(Card.Rank.ACE, Card.Suit.CLUBS);
-        Card c2 = new Card(Card.Rank.EIGHT, Card.Suit.DIAMONDS);
-        
-        Card[] cards = new Card[2];
-        cards[0] = c;
-        cards[1] = c2;
-        
-        
-        Hand h = new Hand(cards);
+        d.deck.sort(cs);
+        System.out.println(d.toString());
+//        Card c = new Card(Card.Rank.ACE, Card.Suit.CLUBS);
+//        Card c2 = new Card(Card.Rank.EIGHT, Card.Suit.DIAMONDS);
+//        
+//        Card[] cards = new Card[2];
+//        cards[0] = c;
+//        cards[1] = c2;
+//        
+//        
+//        Hand h = new Hand(cards);
         
         //h.add(c);
         //h.add(c2);

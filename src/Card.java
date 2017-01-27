@@ -20,7 +20,7 @@ public class Card implements Serializable, Comparable<Card>{
         TWO(2), THREE(3), FOUR(4), FIVE(5), SIX(6), SEVEN(7),
             EIGHT(8), NINE(9), TEN(10), JACK(10), QUEEN(10), KING(10), ACE(11);
             
-        private final int value;
+        protected final int value;
         
         private Rank(int value){
             this.value = value;
@@ -73,7 +73,11 @@ public class Card implements Serializable, Comparable<Card>{
     public static class CompareDescending implements Comparator<Card>{
         @Override
         public int compare(Card c1, Card c2){
-            return -1 * c1.compareTo(c2);
+            int flag = 0;
+            flag = c1.getSuit().compareTo(c2.getSuit());
+            if (flag == 0)
+                flag = c1.getRank().compareTo(c2.getRank());
+          return flag;
         }
     }
     

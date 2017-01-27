@@ -11,7 +11,7 @@ package cheat;
 public class CardTest {
     public static void main(String[] args) {
         // Constructor
-//        Card c = new Card(Card.Rank.ACE, Card.Suit.CLUBS);
+        //Card c = new Card(Card.Rank.ACE, Card.Suit.CLUBS);
 //        Card c1 = new Card(Card.Rank.TWO, Card.Suit.DIAMONDS);
 //        Card c2 = new Card(Card.Rank.THREE, Card.Suit.HEARTS);
 //        Card c3 = new Card(Card.Rank.FOUR, Card.Suit.SPADES);

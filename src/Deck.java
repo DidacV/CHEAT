@@ -7,7 +7,6 @@ package cheat;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -20,8 +19,7 @@ import java.util.Random;
 public class Deck implements Serializable /*, Iterator<Card>*/{
     static final long serialVersionUID = 101;
     // Contains a list of cards (Linked list of cards)
-    private ArrayList<Card> deck = new ArrayList<Card>();
-     ArrayList<Card> shuffledDeck = new ArrayList<Card>();
+     ArrayList<Card> deck = new ArrayList<Card>();
     public Deck(){
         for (int i = 0; i < Card.Suit.values().length; i++){
             for (int j = 0; j < Card.Rank.values().length; j++){
@@ -35,40 +33,41 @@ public class Deck implements Serializable /*, Iterator<Card>*/{
         shuffle(); 
     }
     
-//    public class OddEvenIterator implements Iterator<Card>{
-//        
-//        // Getting iterator
-//        Iterator it = shuffledDeck.iterator();
-//        
-//        @Override
-//        public Card next(){
-//            return null;
-//        }
-//
-//        @Override
-//        public boolean hasNext() {
-//            while (it.hasNext()){
-//                
-//            }
-//        }
-//    }
+    public class OddEvenIterator implements Iterator<Card>{
+        private final static int flag = 0;
+        private final static int i = 0;
+        // Getting iterator
+        Iterator it = deck.iterator();
+        
+        
+        
+        @Override
+        public Card next(){
+            return null;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return !(deck.size() == i);
+        }
+    }
     
     public Card deal(){
-        Card dealtC = shuffledDeck.get(0);
-        shuffledDeck.remove(dealtC);
+        Card dealtC = deck.get(0);
+        deck.remove(dealtC);
         return dealtC;
     }
     
     public int size(){
-        return shuffledDeck.size();
+        return deck.size();
     }
     
     public void newDeck(){
-        shuffledDeck.clear();
+        deck.clear();
         for (int i = 0; i < Card.Suit.values().length; i++){
             for (int j = 0; j < Card.Rank.values().length; j++){
                 Card c = new Card(Card.Rank.values()[j], Card.Suit.values()[i]);
-                shuffledDeck.add(c);
+                deck.add(c);
             }
         }
         /*********************************************
@@ -82,17 +81,18 @@ public class Deck implements Serializable /*, Iterator<Card>*/{
         int n = deck.size();
         for (int i = 0; i < n; i++){
             int newPos = r.nextInt(deck.size()); // Size changing
-            shuffledDeck.add(deck.get(newPos)); // Gets random card
-            deck.remove(newPos); // Remove card that's inserted
+            Card c = deck.get(i);
+            deck.remove(i);
+            deck.add(newPos, c);
         }
-        return shuffledDeck;
+        return deck;
     }
     
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < shuffledDeck.size(); i++) {
-            sb.append(shuffledDeck.get(i).toString());
+        for (int i = 0; i < deck.size(); i++) {
+            sb.append(deck.get(i).toString());
         }
         return sb.toString();
     }
