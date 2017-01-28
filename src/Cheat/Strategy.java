@@ -1,3 +1,5 @@
+package Cheat;
+
 
 /*
  * You should implement a new class BasicStrategy that implements the Strategy interface provided.  Basic strategy should

@@ -1,4 +1,4 @@
-package cheat;
+package Cheat;
 
 public interface CardGame {
 /**

@@ -1,4 +1,4 @@
-package cheat;
+package Cheat;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -252,17 +252,17 @@ public class Hand implements Serializable, Iterable<Card>{
     public boolean isStraight(){
         // put them in ascending order
         this.sortAscending();
-        // check if there are duplicates
         
-        // if there aren't and they are consecutive return true
-        for (Card c : this.cards){
-            // This will avoid duplicates
-            Card.Rank nextRank = c.rank.getNext(c.rank);
-            if (c.rank.equals(nextRank)){
-                return true;
+        boolean flag = false;
+        // Compare
+        for (int i = 0; i < this.cards.size(); i++){
+            Card c1 = this.cards.get(i);
+            Card c2 = this.cards.get(i+1);
+            if (c1.compareTo(c2) < 0){
+                flag = true;
             }
         }
-        return false;
+        return flag;
     }
     
     /**

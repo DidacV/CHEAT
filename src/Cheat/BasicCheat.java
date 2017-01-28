@@ -1,3 +1,5 @@
+package Cheat;
+
 import java.util.*;
 
 public class BasicCheat implements CardGame{

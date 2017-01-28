@@ -1,3 +1,5 @@
+package Cheat;
+
 
 public interface Player {
     enum Action{PASS,PLAY}
