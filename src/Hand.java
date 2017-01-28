@@ -132,17 +132,18 @@ public class Hand implements Serializable, Iterable<Card>{
      *         false otherwise
      */
     public boolean remove(Hand h){
-        h.cards.clear();
-        if (h.cards.size() != 0)
-            return false;
-        
-        // Update count
-        for (Card c : cards){
-            count[c.rank.ordinal()][c.suit.ordinal()]++;
-            // Update total
-            total += c.getRank().value;
+        boolean removed = false;
+        // See which cards are the same between hands
+        for (Card c1 : h){
+            for (Card c2 : this){
+                if (c1.compareTo(c2) == 0){
+                    // remove
+                    h.remove(c1);
+                    removed = true;
+                }
+            }
         }
-        return true;
+        return removed;
     }
     
     /**
@@ -249,6 +250,18 @@ public class Hand implements Serializable, Iterable<Card>{
      * @return true if all cards are in consecutive order
      */
     public boolean isStraight(){
+        // put them in ascending order
+        this.sortAscending();
+        // check if there are duplicates
+        
+        // if there aren't and they are consecutive return true
+        for (Card c : this.cards){
+            // This will avoid duplicates
+            Card.Rank nextRank = c.rank.getNext(c.rank);
+            if (c.rank.equals(nextRank)){
+                return true;
+            }
+        }
         return false;
     }
     
