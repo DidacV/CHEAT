@@ -19,27 +19,21 @@ import java.util.Random;
 public class Deck implements Serializable /*, Iterator<Card>*/{
     static final long serialVersionUID = 101;
     // Contains a list of cards (Linked list of cards)
-     ArrayList<Card> deck = new ArrayList<Card>();
+    public ArrayList<Card> cards = new ArrayList<Card>();
     public Deck(){
         for (int i = 0; i < Card.Suit.values().length; i++){
             for (int j = 0; j < Card.Rank.values().length; j++){
                 Card c = new Card(Card.Rank.values()[j], Card.Suit.values()[i]);
-                deck.add(c);
+                cards.add(c);
             }
         }
-        /*********************************************
-         * ASSUMING WE ALWAYS USE A SHUFFLED DECK  *
-         *********************************************/
-        shuffle(); 
     }
     
     public class OddEvenIterator implements Iterator<Card>{
         private final static int flag = 0;
         private final static int i = 0;
         // Getting iterator
-        Iterator it = deck.iterator();
-        
-        
+        Iterator it = cards.iterator();
         
         @Override
         public Card next(){
@@ -48,51 +42,47 @@ public class Deck implements Serializable /*, Iterator<Card>*/{
 
         @Override
         public boolean hasNext() {
-            return !(deck.size() == i);
+            return !(cards.size() == i);
         }
     }
     
     public Card deal(){
-        Card dealtC = deck.get(0);
-        deck.remove(dealtC);
+        Card dealtC = cards.get(0);
+        cards.remove(dealtC);
         return dealtC;
     }
     
     public int size(){
-        return deck.size();
+        return cards.size();
     }
     
     public void newDeck(){
-        deck.clear();
+        cards.clear();
         for (int i = 0; i < Card.Suit.values().length; i++){
             for (int j = 0; j < Card.Rank.values().length; j++){
                 Card c = new Card(Card.Rank.values()[j], Card.Suit.values()[i]);
-                deck.add(c);
+                cards.add(c);
             }
         }
-        /*********************************************
-         * ASSUMING WE ALWAYS USE A SHUFFLED DECK  *
-         *********************************************/
-        shuffle();
     }
     
     public ArrayList<Card> shuffle(){
         Random r = new Random();
-        int n = deck.size();
+        int n = cards.size();
         for (int i = 0; i < n; i++){
-            int newPos = r.nextInt(deck.size()); // Size changing
-            Card c = deck.get(i);
-            deck.remove(i);
-            deck.add(newPos, c);
+            int newPos = r.nextInt(cards.size()); // Size changing
+            Card c = cards.get(i);
+            cards.remove(i);
+            cards.add(newPos, c);
         }
-        return deck;
+        return cards;
     }
     
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < deck.size(); i++) {
-            sb.append(deck.get(i).toString());
+        for (int i = 0; i < cards.size(); i++) {
+            sb.append(cards.get(i).toString());
         }
         return sb.toString();
     }
