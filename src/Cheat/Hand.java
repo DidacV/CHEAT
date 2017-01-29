@@ -4,17 +4,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
 /**
  * TODO : ITERATOR
  * @author xdn15mcu
  */
-public class Hand implements Serializable, Iterable<Card>{
+public class Hand implements Serializable/*, Iterable<Card>*/{
     static final long serialVersionUID = 102;
-    protected ArrayList<Card> cards = null;
-    private final Iterator<Card> iterator = cards.iterator();
-    private final int[][] count = new int[13][4];
+    private ArrayList<Card> cards = null;
+    //private final Iterator<Card> iterator = cards.iterator();
+    public final int[] count = new int[17];
     private int total = 0;
     
     public Hand(){
@@ -30,12 +31,7 @@ public class Hand implements Serializable, Iterable<Card>{
             this.cards.add(cards[i]);
         }
         
-        // Update count
-        for (Card c : cards){
-            count[c.rank.ordinal()][c.suit.ordinal()]++;
-            // Update total
-            total += c.getRank().value;
-        }
+        update();
     }
     
     /**
@@ -48,12 +44,7 @@ public class Hand implements Serializable, Iterable<Card>{
             this.cards.add(c);
         }
         
-        // Update count
-        for (Card c : cards){
-            count[c.rank.ordinal()][c.suit.ordinal()]++;
-            // Update total
-            total += c.getRank().value;
-        }
+        update();
     }
     
     /**
@@ -62,12 +53,7 @@ public class Hand implements Serializable, Iterable<Card>{
      */
     public void add(Card c){
         this.cards.add(c);
-        // Update count
-        for (Card card : cards){
-            count[card.rank.ordinal()][card.suit.ordinal()]++;
-            // Update total
-            total += card.getRank().value;
-        }
+        update();
     }
     
     /**
@@ -79,12 +65,7 @@ public class Hand implements Serializable, Iterable<Card>{
             this.cards.add(card);
         }
         
-        // Update count
-        for (Card c1 : cards){
-            count[c1.rank.ordinal()][c1.suit.ordinal()]++;
-            // Update total
-            total += c1.getRank().value;
-        }
+        update();
     }
     
     /**
@@ -92,16 +73,12 @@ public class Hand implements Serializable, Iterable<Card>{
      * @param h 
      */
     public void add(Hand h){
-        for (Card c : h.cards){
-            this.cards.add(c);
-        }
         
-        // Update count
-        for (Card c : cards){
-            count[c.rank.ordinal()][c.suit.ordinal()]++;
-            // Update total
-            total += c.getRank().value;
+        for (Card c : h.getHand()){
+            this.add(c);
         }
+
+        update();
     }
     
     /**
@@ -111,17 +88,17 @@ public class Hand implements Serializable, Iterable<Card>{
      *         false otherwise
      */
     public boolean remove(Card c){
-        for (Card card : this.cards){
-            if (!c.equals(card)) return false;
-            else this.cards.remove(c);
+        Iterator<Card> it = cards.iterator();
+        
+        while(it.hasNext()){
+            Card iterC = it.next();
+            
+            if(c.equals(iterC))
+                it.remove();
+            
         }
         
-        // Update count
-        for (Card card : cards){
-            count[card.rank.ordinal()][card.suit.ordinal()]++;
-            // Update total
-            total += card.getRank().value;
-        }
+        update();
         return true;
     }
     
@@ -132,53 +109,46 @@ public class Hand implements Serializable, Iterable<Card>{
      *         false otherwise
      */
     public boolean remove(Hand h){
-        boolean removed = false;
-        // See which cards are the same between hands
-        for (Card c1 : h){
-            for (Card c2 : this){
-                if (c1.compareTo(c2) == 0){
-                    // remove
-                    h.remove(c1);
-                    removed = true;
-                }
-            }
-        }
-        return removed;
+        h.getHand().clear();
+        return h.getHand().isEmpty();
     }
     
     /**
      * Removes a card at a specific position in the hand
      * @param index 
      */
-    public void remove(int index){
-        this.cards.remove(index);
+    public Card remove(int index){
+        Card card = this.cards.get(index);
+        this.cards.remove(card);
         
-        // Update count
-        for (Card c : cards){
-            count[c.rank.ordinal()][c.suit.ordinal()]++;
-            // Update total
-            total += c.getRank().value;
-        }
+        update();
+        
+        return card;
     }
 /* *
     TODO : ITERATOR 
     */
-    @Override
-    public Iterator<Card> iterator() {
-        
-        while (iterator.hasNext()){
-            
-            iterator.next();
-        }
-        return iterator;
-    }
+//    @Override
+//    public Iterator<Card> iterator() {
+//        
+//        while (iterator.hasNext()){
+//            
+//            iterator.next();
+//        }
+//        return iterator;
+//    }
     
     /**
      * Sorts hand into ascending order
      * It uses Card compareTo
      */
     public void sortAscending(){
-        Collections.sort(this.cards);
+        Collections.sort(cards, new Comparator<Card>(){
+            @Override
+            public int compare(Card c, Card c1){
+                return c.compareTo(c1);
+            }
+        });
     }
     
     /**
@@ -235,12 +205,15 @@ public class Hand implements Serializable, Iterable<Card>{
      * @return true if it's flush
      */
     public boolean isFlush(){
+        boolean flag = false;
         for (Card c : this.cards){
             // Compare each card's suit to the first one
-            if (c.suit == this.cards.get(0).suit)
-                return true;
+            if (c.getSuit() == this.cards.get(0).getSuit())
+                flag = true;
+            else
+                return false;
         }
-        return false;
+        return flag;
     }
     
     /**
@@ -253,16 +226,36 @@ public class Hand implements Serializable, Iterable<Card>{
         // put them in ascending order
         this.sortAscending();
         
-        boolean flag = false;
+        int currentC = this.cards.get(0).getRank().ordinal();
         // Compare
-        for (int i = 0; i < this.cards.size(); i++){
-            Card c1 = this.cards.get(i);
-            Card c2 = this.cards.get(i+1);
-            if (c1.compareTo(c2) < 0){
-                flag = true;
-            }
+        for (Card c : cards){
+            currentC++;
+            if (c.getRank().getNext().ordinal() != currentC)
+                return false;
         }
-        return flag;
+        return true;
+    }
+    
+    /**
+     * Gets this hand size
+     * @return the arrayList size
+     */
+    public int size(){
+        return this.cards.size();
+    }
+    
+    
+    public void update(){
+        // Update count
+        for (Card c : cards){
+            count[c.rank.ordinal()]++;
+            count[Card.Rank.values().length + c.suit.ordinal()]++;
+            total += c.getRank().value;
+        }
+    }
+    
+    public ArrayList<Card> getHand(){
+        return this.cards;
     }
     
     /**
@@ -272,11 +265,11 @@ public class Hand implements Serializable, Iterable<Card>{
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("This hand contains: ");
+        sb.append("This hand contains: \n");
         for (Card c : this.cards){
-            sb.append(c.toString()).append("\n");
+            sb.append(c.toString());
         }
-        sb.append("_____________________");
+        sb.append("-------------------");
         return sb.toString();
     }
     

@@ -26,9 +26,9 @@ public class Card implements Serializable, Comparable<Card>{
             this.value = value;
         }
         
-        public Rank getNext(Rank currentRank){
+        public Rank getNext(){
             if (this.ordinal() < Rank.values().length - 1)
-                return Rank.values()[currentRank.ordinal() + 1];
+                return Rank.values()[this.ordinal() + 1];
             else
                 return Rank.values()[0];
         }
@@ -53,7 +53,10 @@ public class Card implements Serializable, Comparable<Card>{
     
     public static int difference(Card card1, Card card2){
         // Gets the difference between card ranks
-        return card1.getRank().ordinal() - card2.getRank().ordinal();
+        int d;
+        d = card1.getRank().ordinal() - card2.getRank().ordinal();
+        if (d < 0) d *= -1;
+        return d;
     }
     
     public static int differenceValue(Card card1, Card card2){
@@ -94,7 +97,6 @@ public class Card implements Serializable, Comparable<Card>{
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("This card is the: ");
         sb.append(this.rank.toString() + " " +this.suit.toString());
         sb.append(("\n"));
         return sb.toString();

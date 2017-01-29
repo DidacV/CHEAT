@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Cheat;
 
 import java.io.Serializable;
@@ -19,8 +14,10 @@ import java.util.Random;
 public class Deck implements Serializable /*, Iterator<Card>*/{
     static final long serialVersionUID = 101;
     // Contains a list of cards (Linked list of cards)
-    public ArrayList<Card> cards = new ArrayList<Card>();
+    private ArrayList<Card> cards;
+    
     public Deck(){
+        cards = new ArrayList<Card>();
         for (int i = 0; i < Card.Suit.values().length; i++){
             for (int j = 0; j < Card.Rank.values().length; j++){
                 Card c = new Card(Card.Rank.values()[j], Card.Suit.values()[i]);
