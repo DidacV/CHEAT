@@ -16,8 +16,8 @@ public class CardTest {
     private Card c2;
     private Card c3;
     private ArrayList<Card> cardArr = new ArrayList<Card>();
-    private Card.CompareSuit cs;
     private Card.CompareDescending cd;
+    
     @Before
     public void createCard(){
         c = new Card(Card.Rank.TEN, Card.Suit.DIAMONDS);
@@ -28,6 +28,7 @@ public class CardTest {
         cardArr.add(c1);
         cardArr.add(c2);
         cardArr.add(c3);
+        cd = new Card.CompareDescending();
     }
     
     @Test
@@ -53,7 +54,7 @@ public class CardTest {
     @Test
     public void compareDes(){
         System.out.println("Compare descending: ");
-        cardArr.sort(cd);
+        Collections.sort(cardArr, cd);
         System.out.println(cardArr);
     }
     

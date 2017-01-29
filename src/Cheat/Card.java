@@ -73,16 +73,10 @@ public class Card implements Serializable, Comparable<Card>{
     public static class CompareDescending implements Comparator<Card>{
         @Override
         public int compare(Card c1, Card c2){
-            int flag = -1 * (c1.rank.ordinal() - c2.rank.ordinal());
+            int flag = -1 * (c1.getRank().compareTo(c2.getRank()));
             if (flag == 0) {
-                flag = c1.suit.ordinal() - c2.suit.ordinal();
+                flag = c1.getSuit().compareTo(c2.getSuit());
             }
-//            int flag = 0;
-//            flag = c1.getSuit().compareTo(c2.getSuit());
-//            if (flag >= 0)
-//                flag = c1.getRank().compareTo(c2.getRank());
-//          return flag;
-            //int flag = -1 * c1.compareTo(c2);
             return flag;
         }
     }
