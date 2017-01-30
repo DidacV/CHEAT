@@ -12,10 +12,6 @@ import java.util.Random;
  * @author Didac
  */
 public class BasicStrategy implements Strategy{
-    public BasicStrategy(){
-        
-    }
-    
     /**
      * Decides on whether to cheat or not	
      * @param b   the bid this player has to follow (i.e the 
@@ -97,12 +93,6 @@ public class BasicStrategy implements Strategy{
                 // increase total
                 total++;
         }
-        
-        if (total > 4)
-            return true;
-        
-        return false;
+        return total > 4;
     }
-    
-    
 }

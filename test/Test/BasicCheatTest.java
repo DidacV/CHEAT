@@ -16,5 +16,6 @@ public class BasicCheatTest {
     @Test
     public void initialise(){
         bc.initialise();
+        bc.playGame();
     }
 }

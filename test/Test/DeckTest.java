@@ -15,7 +15,9 @@ public class DeckTest {
     
     @Test
     public void deal(){
-//        System.out.println(deck.cards.get(0));
+        System.out.println(deck.getCards().get(0));
+        deck.deal();
+        System.out.println(deck.getCards().get(0));
 //        deck.deal();
 //        System.out.println("after dealing: ");  
 //        System.out.println(deck.cards.get(0));
@@ -23,11 +25,11 @@ public class DeckTest {
     
     @Test
     public void shuffle(){
-        System.out.println("Before shuffling");
-        System.out.println(deck);
-        System.out.println("After shuffling");
-        deck.shuffle();
-        System.out.println(deck);
+//        System.out.println("Before shuffling");
+//        System.out.println(deck);
+//        System.out.println("After shuffling");
+//        deck.shuffle();
+//        System.out.println(deck);
     } 
     
 }

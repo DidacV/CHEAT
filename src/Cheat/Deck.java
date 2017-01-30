@@ -11,7 +11,7 @@ import java.util.Random;
  */
 
 // ASSUMING WE ALWAYS USE THE SHUFFLED DECK
-public class Deck implements Serializable /*, Iterator<Card>*/{
+public class Deck implements Serializable, Iterable<Card>{
     static final long serialVersionUID = 101;
     // Contains a list of cards (Linked list of cards)
     private ArrayList<Card> cards;
@@ -24,6 +24,29 @@ public class Deck implements Serializable /*, Iterator<Card>*/{
                 cards.add(c);
             }
         }
+    }
+    
+    @Override
+    public Iterator<Card> iterator(){
+        //return cards.iterator();
+        return new Iterator<Card>(){
+            private int i = 0;
+            
+            @Override
+            public boolean hasNext() {
+                return (i != cards.size());
+            }
+
+            @Override
+            public Card next() {
+                return (cards.get(i++));
+            }
+            
+            @Override
+            public void remove() {
+                cards.remove(i);
+            }
+        };
     }
     
     public class OddEvenIterator implements Iterator<Card>{

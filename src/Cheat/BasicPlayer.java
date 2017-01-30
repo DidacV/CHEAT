@@ -1,52 +1,52 @@
 package Cheat;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
  * @author Didac
  */
 public class BasicPlayer implements Player{
+    
+    Hand h;
+    Strategy strat;
+    CardGame game;
+    
     public BasicPlayer(BasicStrategy strat, BasicCheat cheat){
-        
+        h = new Hand();
+        this.strat = strat;
+        this.game = cheat;
     }
 
     @Override
     public void addCard(Card c) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.h.add(c);
     }
 
     @Override
     public void addHand(Hand h) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.h.add(h);
     }
 
     @Override
     public int cardsLeft() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.h.size();
     }
 
     @Override
     public void setGame(CardGame g) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.game = g;
     }
 
     @Override
     public void setStrategy(Strategy s) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.strat = s;
     }
 
     @Override
     public Bid playHand(Bid b) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return strat.chooseBid(b, h, strat.cheat(b, h));
     }
 
     @Override
     public boolean callCheat(Bid b) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return strat.callCheat(h, b);
     }
 }
