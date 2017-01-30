@@ -88,7 +88,7 @@ public class BasicCheat implements CardGame{
             Deck d=new Deck();
             d.shuffle();
             //Deal cards to players
-            Iterator<Card> it=d.iterator();
+            Iterator<Card> it=d.getCards().iterator();
             int count=0;
             while(it.hasNext()){
                     players[count%nosPlayers].addCard(it.next());

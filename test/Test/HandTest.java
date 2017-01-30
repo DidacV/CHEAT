@@ -35,13 +35,8 @@ public class HandTest {
     
     @Test
     public void testCountTotal(){
-        System.out.println("COUNT:");
-        StringBuilder sb = new StringBuilder();
-        for (int row : hand.count){
-            sb.append(row)
-                    .append("\n");
-        }
-        System.out.println(sb);
+        System.out.println("HISTOGRAM:");
+        System.out.println(hand.getHistogram());
     }
     
     @Test
@@ -121,6 +116,7 @@ public class HandTest {
         hand.add(cardArr);
         System.out.println(hand);
     }
+    
     @Test
     public void printHand(){
         System.out.println(hand);

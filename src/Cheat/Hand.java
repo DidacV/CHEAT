@@ -11,11 +11,11 @@ import java.util.Iterator;
  * TODO : ITERATOR
  * @author xdn15mcu
  */
-public class Hand implements Serializable/*, Iterable<Card>*/{
+public class Hand implements Serializable, Iterable<Card>{
     static final long serialVersionUID = 102;
     private ArrayList<Card> cards = null;
     //private final Iterator<Card> iterator = cards.iterator();
-    public final int[] count = new int[17];
+    private final int[] histogram = new int[17];
     private int total = 0;
     
     public Hand(){
@@ -74,7 +74,7 @@ public class Hand implements Serializable/*, Iterable<Card>*/{
      */
     public void add(Hand h){
         
-        for (Card c : h.getHand()){
+        for (Card c : h.cards){
             this.add(c);
         }
 
@@ -109,8 +109,8 @@ public class Hand implements Serializable/*, Iterable<Card>*/{
      *         false otherwise
      */
     public boolean remove(Hand h){
-        h.getHand().clear();
-        return h.getHand().isEmpty();
+        h.cards.clear();
+        return h.cards.isEmpty();
     }
     
     /**
@@ -125,18 +125,11 @@ public class Hand implements Serializable/*, Iterable<Card>*/{
         
         return card;
     }
-/* *
-    TODO : ITERATOR 
-    */
-//    @Override
-//    public Iterator<Card> iterator() {
-//        
-//        while (iterator.hasNext()){
-//            
-//            iterator.next();
-//        }
-//        return iterator;
-//    }
+    
+    @Override
+    public Iterator<Card> iterator() {
+        return cards.iterator();
+    }
     
     /**
      * Sorts hand into ascending order
@@ -248,10 +241,39 @@ public class Hand implements Serializable/*, Iterable<Card>*/{
     public void update(){
         // Update count
         for (Card c : cards){
-            count[c.rank.ordinal()]++;
-            count[Card.Rank.values().length + c.suit.ordinal()]++;
+            histogram[c.rank.ordinal()]++;
+            histogram[Card.Rank.values().length + c.suit.ordinal()]++;
             total += c.getRank().value;
         }
+    }
+    
+    public String getHistogram(){
+        StringBuilder sb = new StringBuilder();
+        Card.Rank[] rank = Card.Rank.values();
+        Card.Suit[] suit = Card.Suit.values();
+        for (int i = 0; i < rank.length; i++){
+            sb.append(rank[i].name()).append("\t\t").append("- ");
+            for (int j = 0; j < histogram[i]; j++){
+                sb.append("*");
+            }
+            sb.append("\n");
+        }
+        for (int i = 0; i < suit.length; i++){
+            sb.append(suit[i].name()).append("   \t").append("- ");
+            for (int j = 0; j < histogram[rank.length + i]; j++){
+                sb.append("*");
+            }
+            sb.append("\n");
+        }
+        
+//        for (Card.Rank r : Card.Rank.values()){
+//            sb.append(r.name());
+//            sb.append("*");
+//            for (int i = 0; i < histogram.length; i++){
+//                
+//            }
+//        }
+        return sb.toString();
     }
     
     public ArrayList<Card> getHand(){

@@ -75,6 +75,10 @@ public class Deck implements Serializable /*, Iterator<Card>*/{
         return cards;
     }
     
+    public ArrayList<Card> getCards(){
+        return this.cards;
+    }
+    
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
