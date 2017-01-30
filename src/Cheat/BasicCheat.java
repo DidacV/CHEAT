@@ -88,7 +88,7 @@ public class BasicCheat implements CardGame{
             Deck d=new Deck();
             d.shuffle();
             //Deal cards to players
-            Iterator<Card> it=d.getCards().iterator();
+            Iterator<Card> it=d.iterator();
             int count=0;
             while(it.hasNext()){
                     players[count%nosPlayers].addCard(it.next());
@@ -118,7 +118,7 @@ public class BasicCheat implements CardGame{
                     if(str.equals("Q")||str.equals("q")||str.equals("quit"))
                             finished=true;
                     int w=winner();
-                    if(w!=0){
+                    if(w>0){
                             System.out.println("The Winner is Player "+(w+1));
                             finished=true;
                     }

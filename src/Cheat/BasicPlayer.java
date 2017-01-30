@@ -27,7 +27,7 @@ public class BasicPlayer implements Player{
 
     @Override
     public int cardsLeft() {
-        return this.h.size();
+        return h.size();
     }
 
     @Override
