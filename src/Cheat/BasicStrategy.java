@@ -51,7 +51,7 @@ public class BasicStrategy implements Strategy{
         // check if cheating or not
         if (cheat){
             Random r = new Random();
-            Card c = h.remove(r.nextInt(h.getHand().size()));
+            Card c = h.remove(r.nextInt(h.getCards().size()));
             // if player's cheating single card selected randomly
             newH.add(c);
             return new Bid(newH, rank);
@@ -74,24 +74,6 @@ public class BasicStrategy implements Strategy{
             }
         }
         
-        // Next Rank
-//        if (newH.size() == 0){
-//            for (Card c : h){
-//                if (c.getRank().equals(nextBRank))
-//                    newH.add(c);
-//                }
-//        }
-        // Set the bidding rank according to what we have
-//        if (h.countRank(biddingRank) < h.countRank(nextBRank)){
-//            biddingRank = nextBRank;
-//        }
-
-        // Add cards of either current rank of next rank
-//        for (Card c : h){
-//            if (c.getRank().equals(biddingRank))
-//                newH.add(c);
-//        }
- 
         h.remove(newH);
         return new Bid(newH, rank);
     }

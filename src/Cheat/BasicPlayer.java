@@ -9,7 +9,7 @@ public class BasicPlayer implements Player{
     private Strategy strat;
     private CardGame game;
     
-    public BasicPlayer(BasicStrategy strat, BasicCheat cheat){
+    public BasicPlayer(Strategy strat, CardGame cheat){
         h = new Hand();
         this.strat = strat;
         this.game = cheat;

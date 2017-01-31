@@ -118,10 +118,6 @@ public class Hand implements Serializable, Iterable<Card>{
         }
         return false;
     }
-    
-    public ArrayList<Card> getCards(){
-        return this.cards;
-    }
     /**
      * Removes a card at a specific position in the hand
      * @param index 
@@ -285,7 +281,7 @@ public class Hand implements Serializable, Iterable<Card>{
         return sb.toString();
     }
     
-    public ArrayList<Card> getHand(){
+    public ArrayList<Card> getCards(){
         return this.cards;
     }
     
