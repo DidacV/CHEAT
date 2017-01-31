@@ -67,8 +67,7 @@ public class Deck implements Serializable, Iterable<Card>{
     }
     
     public Card deal(){
-        Card dealtC = cards.get(0);
-        cards.remove(dealtC);
+        Card dealtC = cards.remove(0);
         return dealtC;
     }
     
@@ -91,8 +90,7 @@ public class Deck implements Serializable, Iterable<Card>{
         int n = cards.size();
         for (int i = 0; i < n; i++){
             int newPos = r.nextInt(cards.size()); // Size changing
-            Card c = cards.get(i);
-            cards.remove(i);
+            Card c = cards.remove(i);
             cards.add(newPos, c);
         }
         return cards;

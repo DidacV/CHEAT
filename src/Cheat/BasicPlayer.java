@@ -5,9 +5,9 @@ package Cheat;
  */
 public class BasicPlayer implements Player{
     
-    Hand h;
-    Strategy strat;
-    CardGame game;
+    private Hand h;
+    private Strategy strat;
+    private CardGame game;
     
     public BasicPlayer(BasicStrategy strat, BasicCheat cheat){
         h = new Hand();

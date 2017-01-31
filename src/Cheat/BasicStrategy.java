@@ -24,8 +24,10 @@ public class BasicStrategy implements Strategy{
     public boolean cheat(Bid b, Hand h) {
         Card.Rank playedRank = b.getRank();
         Card.Rank nextRank = playedRank.getNext();
+        if (h.countRank(playedRank) == 0 && h.countRank(nextRank) == 0)
+            return true;
         
-        return h.countRank(playedRank) == 0 && h.countRank(nextRank) == 0;
+        return false;
     }
 
     /**
@@ -37,36 +39,61 @@ public class BasicStrategy implements Strategy{
      */
     @Override
     public Bid chooseBid(Bid b, Hand h, boolean cheat) {
-        Random r = new Random();
         Hand newH = new Hand();
+        Random rd = new Random();
+        Card.Rank rank;
+        
+        if(rd.nextInt(4)<2)
+            rank = b.getRank();
+        else
+            rank = b.getRank().getNext();
+        
         // check if cheating or not
         if (cheat){
-            int rPos = r.nextInt(h.size());
+            Random r = new Random();
+            Card c = h.remove(r.nextInt(h.getHand().size()));
             // if player's cheating single card selected randomly
-            Card c = h.remove(rPos);
             newH.add(c);
-            return new Bid(newH, b.getRank());
-        // if not cheating
-        } else {
-            // Gets current and next bidding ranks
-            Card.Rank biddingRank = b.getRank();
-            Card.Rank nextBRank = biddingRank.getNext();
-            
-            // Set the bidding rank according to what we have
-            if (h.countRank(biddingRank) < h.countRank(nextBRank)){
-                biddingRank = nextBRank;
-            }
-            
-            // Add cards of either current rank of next rank
-            for (Card c : h){
-                if (c.getRank().equals(biddingRank))
-                    newH.add(c);
-            }
-            
-            h.remove(newH);
-            return new Bid(newH, b.getRank());
+            return new Bid(newH, rank);
         }
         
+        // Gets current and next bidding ranks
+        Card.Rank biddingRank = b.getRank();
+        Card.Rank nextBRank = biddingRank.getNext();
+        
+        // Current Rank
+        for (Card c : h){
+            Card.Rank cRank = c.getRank();
+            if (cRank.equals(biddingRank) && newH.countRank(nextBRank) == 0){
+                newH.add(c);
+                rank = c.getRank();
+            }
+            else if (cRank.equals(nextBRank) && newH.countRank(biddingRank)==0){
+                newH.add(c);
+                rank = c.getRank();
+            }
+        }
+        
+        // Next Rank
+//        if (newH.size() == 0){
+//            for (Card c : h){
+//                if (c.getRank().equals(nextBRank))
+//                    newH.add(c);
+//                }
+//        }
+        // Set the bidding rank according to what we have
+//        if (h.countRank(biddingRank) < h.countRank(nextBRank)){
+//            biddingRank = nextBRank;
+//        }
+
+        // Add cards of either current rank of next rank
+//        for (Card c : h){
+//            if (c.getRank().equals(biddingRank))
+//                newH.add(c);
+//        }
+ 
+        h.remove(newH);
+        return new Bid(newH, rank);
     }
 
     /**
@@ -78,7 +105,7 @@ public class BasicStrategy implements Strategy{
     @Override
     public boolean callCheat(Hand h, Bid b) {
         // Get value of bid
-        int total = b.getHand().size();
+        int total = b.getCount();
         int cAmount = h.countRank(b.getRank());
         
         total += cAmount;

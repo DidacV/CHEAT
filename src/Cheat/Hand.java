@@ -109,10 +109,19 @@ public class Hand implements Serializable, Iterable<Card>{
      *         false otherwise
      */
     public boolean remove(Hand h){
-        h.cards.clear();
-        return h.cards.isEmpty();
+        if(this.cards.containsAll(h.getCards())){
+            for (Card c : h.getCards()){
+                this.remove(c);
+            }
+            update();
+            return true;
+        }
+        return false;
     }
     
+    public ArrayList<Card> getCards(){
+        return this.cards;
+    }
     /**
      * Removes a card at a specific position in the hand
      * @param index 
@@ -287,7 +296,6 @@ public class Hand implements Serializable, Iterable<Card>{
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("This hand contains: \n");
         for (Card c : this.cards){
             sb.append(c.toString());
         }
