@@ -8,8 +8,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 /**
- * TODO : ITERATOR
- * @author xdn15mcu
+ * 
+ * @author Diego Viteri
  */
 public class Hand implements Serializable, Iterable<Card>{
     static final long serialVersionUID = 102;

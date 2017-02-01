@@ -1,19 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Cheat;
 
 import java.util.Scanner;
 
 /**
  *
- * @author Didac
+ * @author Diego Viteri
  */
 public class HumanStrategy implements Strategy{
     Scanner sc = new Scanner(System.in);
     
+    /**
+     * 
+     * @param b
+     * @param h
+     * @return 
+     */
     @Override
     public boolean cheat(Bid b, Hand h) {
         // Check if hand holds current rank or next rank
@@ -42,6 +43,13 @@ public class HumanStrategy implements Strategy{
         return false;
     }
     
+    /**
+     * 
+     * @param b
+     * @param h
+     * @param cheat
+     * @return 
+     */
     @Override
     public Bid chooseBid(Bid b, Hand h, boolean cheat){
         Scanner sc = new Scanner(System.in);
@@ -200,6 +208,12 @@ public class HumanStrategy implements Strategy{
         return new Bid(newH, rank);
     }
     
+    /**
+     * 
+     * @param h
+     * @param b
+     * @return 
+     */
     @Override
     public boolean callCheat(Hand h, Bid b) {
         System.out.println("Do you want to call cheat? ");
@@ -221,6 +235,11 @@ public class HumanStrategy implements Strategy{
         return false;
     }
     
+    /**
+     * 
+     * @param h
+     * @return 
+     */
     public int maxBiddingCheatHand(Hand h){
         int maxCards = 0;
         while (maxCards < 1 || maxCards > 4){
@@ -235,6 +254,12 @@ public class HumanStrategy implements Strategy{
         return maxCards;
     }
     
+    /**
+     * 
+     * @param h
+     * @param b
+     * @return 
+     */
     public int maxBiddingNoCheatHand(Hand h, Bid b){
         int maxCards = 0;
         while (maxCards < 1 || maxCards > h.countRank(b.getRank()) + h.countRank(b.getRank().getNext())){

@@ -9,7 +9,6 @@ public class BasicCheat implements CardGame{
     private int currentPlayer;
     private Hand discards;
     private Bid currentBid;
-    
 
     public BasicCheat(){
         this(MINPLAYERS);
@@ -17,8 +16,9 @@ public class BasicCheat implements CardGame{
     public BasicCheat(int n){
         nosPlayers=n;
         players=new Player[nosPlayers];
-        for(int i=0;i<nosPlayers;i++)
-                players[i]=(new BasicPlayer(new ThinkerStrategy(),this));
+        for(int i=0;i<nosPlayers;i++){
+                players[i] = (new BasicPlayer(StrategyFactory.getStrategy(), this));
+        }
         currentBid=new Bid();
         currentBid.setRank(Card.Rank.TWO);
         currentPlayer=0;

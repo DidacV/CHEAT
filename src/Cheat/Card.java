@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Cheat;
 
 import java.io.Serializable;
@@ -10,7 +5,7 @@ import java.util.Comparator;
 
 /**
  *
- * @author xdn15mcu
+ * @author Diego Viteri
  */
 public class Card implements Serializable, Comparable<Card>{
     
@@ -38,19 +33,38 @@ public class Card implements Serializable, Comparable<Card>{
     Rank rank;
     Suit suit;
     
+    /**
+     * 
+     * @param rank
+     * @param suit 
+     */
     public Card(Rank rank, Suit suit){
         this.rank = rank;
         this.suit = suit;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public Rank getRank(){
         return this.rank;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public Suit getSuit(){
         return this.suit;
     }
     
+    /**
+     * 
+     * @param card1
+     * @param card2
+     * @return 
+     */
     public static int difference(Card card1, Card card2){
         // Gets the difference between card ranks
         int d;
@@ -59,10 +73,19 @@ public class Card implements Serializable, Comparable<Card>{
         return d;
     }
     
+    /**
+     * 
+     * @param card1
+     * @param card2
+     * @return 
+     */
     public static int differenceValue(Card card1, Card card2){
         return card1.getRank().value - card2.getRank().value;
     }
     
+    /**
+     * 
+     */
     public static class CompareSuit implements Comparator<Card>{
         @Override
         public int compare(Card c1, Card c2){
@@ -73,6 +96,9 @@ public class Card implements Serializable, Comparable<Card>{
         }
     }
     
+    /**
+     * 
+     */
     public static class CompareDescending implements Comparator<Card>{
         @Override
         public int compare(Card c1, Card c2){
@@ -84,6 +110,11 @@ public class Card implements Serializable, Comparable<Card>{
         }
     }
     
+    /**
+     * 
+     * @param card
+     * @return 
+     */
     @Override
     public int compareTo (Card card){
           int flag = 0;
@@ -94,6 +125,10 @@ public class Card implements Serializable, Comparable<Card>{
           return flag;
     }
     
+    /**
+     * 
+     * @return 
+     */
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();

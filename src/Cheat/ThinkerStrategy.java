@@ -1,21 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Cheat;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 /**
  *
- * @author Didac
+ * @author Diego Viteri
  */
 public class ThinkerStrategy implements Strategy{
     
     private Hand pile = new Hand();
     
+    /**
+     * 
+     * @param b
+     * @param h
+     * @return 
+     */
     @Override
     public boolean cheat(Bid b, Hand h) {
         Card.Rank playedRank = b.getRank();
@@ -26,6 +26,13 @@ public class ThinkerStrategy implements Strategy{
         return false;
     }
 
+    /**
+     * 
+     * @param b
+     * @param h
+     * @param cheat
+     * @return 
+     */
     @Override
     public Bid chooseBid(Bid b, Hand h, boolean cheat) {
         Hand newH = new Hand();
@@ -39,11 +46,13 @@ public class ThinkerStrategy implements Strategy{
                 chance = r.nextInt(h.size());
                 Card c = h.getCards().get((int)chance);
                 chance = Math.random();
+                
                 if (c.getRank().ordinal() >= 5 && chance > 0.7 && 
                         !c.getRank().equals(b.getRank()) && 
                         !c.getRank().equals(b.getRank().getNext())){
                     //choose higher ranks
                     newH.add(c);
+                    
                 } else if (c.getRank().ordinal() < 5 && chance < 0.3 && 
                         !c.getRank().equals(b.getRank()) && 
                         !c.getRank().equals(b.getRank().getNext())){
@@ -78,6 +87,12 @@ public class ThinkerStrategy implements Strategy{
         return new Bid(newH, rBid);
     }
 
+    /**
+     * 
+     * @param h
+     * @param b
+     * @return 
+     */
     @Override
     public boolean callCheat(Hand h, Bid b) {
         // Get value of bid

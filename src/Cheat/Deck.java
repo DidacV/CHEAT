@@ -1,16 +1,16 @@
 package Cheat;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
 /**
- * TODO: Iterator, serializable
- * @author xdn15mcu
+ * 
+ * @author Diego Viteri
  */
-
-// ASSUMING WE ALWAYS USE THE SHUFFLED DECK
 public class Deck implements Serializable, Iterable<Card>{
     static final long serialVersionUID = 101;
     // Contains a list of cards (Linked list of cards)
@@ -49,31 +49,51 @@ public class Deck implements Serializable, Iterable<Card>{
         };
     }
     
+    /**
+     * 
+     */
     public class OddEvenIterator implements Iterator<Card>{
-        private final static int i = 0;
-        // Getting iterator
-        Iterator it = cards.iterator();
+        private int index = 0;
+        private int last = cards.size();
+        private boolean odds = true;
         
         @Override
         public Card next(){
-            return null;
+            Card c = cards.get(index);
+            index += 2;
+            if (!hasNext() && odds){
+                index = 1;
+                odds = false;
+            }
+            return c;
         }
 
         @Override
         public boolean hasNext() {
-            return !(cards.size() == i);
+            return index + 2 < last;
         }
     }
     
+    /**
+     * 
+     * @return 
+     */
     public Card deal(){
         Card dealtC = cards.remove(0);
         return dealtC;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public int size(){
         return cards.size();
     }
     
+    /**
+     * 
+     */
     public void newDeck(){
         cards.clear();
         for (int i = 0; i < Card.Suit.values().length; i++){
@@ -84,6 +104,10 @@ public class Deck implements Serializable, Iterable<Card>{
         }
     }
     
+    /**
+     * 
+     * @return 
+     */
     public ArrayList<Card> shuffle(){
         Random r = new Random();
         int n = cards.size();
@@ -95,10 +119,35 @@ public class Deck implements Serializable, Iterable<Card>{
         return cards;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public ArrayList<Card> getCards(){
         return this.cards;
     }
     
+    /**
+     * 
+     * @param out
+     * @throws IOException 
+     */
+    private void writeObject(ObjectOutputStream out) throws IOException{
+        OddEvenIterator iterator = new OddEvenIterator();
+        Iterator<Card> it = iterator;
+        
+        ArrayList<Card> s = new ArrayList<Card>();
+        while(it.hasNext()){
+            Card c = it.next();
+            s.add(c);
+        }
+        out.writeObject(s);
+    }
+    
+    /**
+     * 
+     * @return 
+     */
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
