@@ -98,7 +98,6 @@ public class Card implements Serializable, Comparable<Card>{
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append(this.rank + " " +this.suit);
-        sb.append(("\n"));
         return sb.toString();
     }
 }

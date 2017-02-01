@@ -50,7 +50,6 @@ public class Deck implements Serializable, Iterable<Card>{
     }
     
     public class OddEvenIterator implements Iterator<Card>{
-        private final static int flag = 0;
         private final static int i = 0;
         // Getting iterator
         Iterator it = cards.iterator();

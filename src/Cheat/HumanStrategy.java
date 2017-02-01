@@ -17,102 +17,206 @@ public class HumanStrategy implements Strategy{
     @Override
     public boolean cheat(Bid b, Hand h) {
         // Check if hand holds current rank or next rank
-        if (h.countRank(b.getRank()) <= 0)
+        if (h.countRank(b.getRank()) == 0 && h.countRank(b.getRank().getNext()) == 0)
             // You're only allowed to cheat
             return true;
         
-        // if true, ask to cheat or play current or next (not cheat)
+        // If theres one card or more of the current rank
+        // Player is allowed to cheat or not to cheat
+        int chose = 0;
+        while (chose < 1 || chose > 2){
+            // Ask if they want to cheat
+            System.out.println("Do you want to cheat?");
+            System.out.println("1 for yes, 2 for no: ");
+            if (sc.hasNextInt()){
+                chose = sc.nextInt();
+            } else {
+                System.out.println("Try again: ");
+                sc.nextLine();
+            }
+        }
         
-        // Ask if they want to cheat
-        System.out.println("Do you want to cheat?");
-        System.out.println("Type y to cheat, any other key to not cheat: ");
-        String in = sc.nextLine().toUpperCase();
-        //String inU = in.toUpperCase();
-        // Check y / yes
-        if (in.equals("Y")||in.equals("YES"))
+        if (chose == 1)
             return true;
         
         return false;
     }
-
+    
     @Override
-    public Bid chooseBid(Bid b, Hand h, boolean cheat) {
+    public Bid chooseBid(Bid b, Hand h, boolean cheat){
+        Scanner sc = new Scanner(System.in);
         Hand newH = new Hand();
-        Card.Rank rank = null;
-        // Ask what bid to choose
-        boolean chosen = false;
-        
+        Card.Rank rank = b.getRank();
         if (cheat){
-            // Ask to play the cards other than the current rank or next rank
+            System.out.println("You're cheating.");
+            System.out.println("This is your hand: ");
+            System.out.println(h);
+            int maxCards = maxBiddingCheatHand(h);
             
-            // Show the cards available to play
-            
-            
-        }
-        
-        // Otherwise ask to play current or nextRank and how many 
-        // Display only current and 
-        while (!chosen){
-            System.out.println("Your turn to bid.");
-            int amount = 0;
-            while (amount == 0){
-                // Show rank being played and next rank
-                System.out.println("Current rank being played: ");
-                System.out.println(b.getRank());
-                // Show current hand
-                System.out.println("This is your hand: ");
-                System.out.println(h);
-                System.out.println("Choose how many do you want to play (More than 0): ");
-                amount = sc.nextInt();
+            // Let player choose
+            while (newH.size() < maxCards){
+                int chosenCard = h.size(); 
+                while (chosenCard >= h.size()){
+                    
+                    System.out.println("This is your hand: ");
+                    for (int i = 0; i < h.size(); i++){
+                        System.out.println(i + ". " + h.getCards().get(i));
+                    }
+                    if (newH.size() < 1)
+                        System.out.println("Select your first bidding card:");
+                    else 
+                        System.out.println("Select next card to add: ");
+                    
+                    
+                    if(sc.hasNextInt()){
+                        chosenCard = sc.nextInt();
+                    }else{
+                       System.out.println("Not a number");
+                       sc.nextLine();
+                    }
+                    
+                }
                 
-                // Needed so the next input is registered
-                sc.nextLine(); 
+                // Add
+                newH.add(h.getCards().get(chosenCard));
+                if (newH.size() == maxCards){
+                    if(newH.countRank(b.getRank()) == newH.size() || 
+                            newH.countRank(b.getRank().getNext()) == newH.size()){
+                        h.add(newH);
+                        newH.getCards().clear();
+                        System.out.println("Playing this wouldn't be cheating!");
+                    } 
+                }
+                h.getCards().remove(chosenCard);
             }
-            
-            System.out.println("Choose the rank.");
-            System.out.println("two, three, four, etc..");
-            String rIn = sc.nextLine().toUpperCase();
-            
-            // Check if the bid is in the hand
-            // Check if rank exists
-            try {
-                rank = Card.Rank.valueOf(rIn);
-            } catch ( IllegalArgumentException e ) {
-                System.out.println("No such rank, try a different one. ");
-            }
-            
-            if (h.countRank(rank) >= amount && rank != null)
-                    chosen = true;
-            else
-                System.out.println("Not enough cards for the amount given. ");
-
-            if (chosen){
-                // Create array of cards with the rank
-                for (int i = 0; i < h.size(); i++){
-                    Card c = h.getCards().get(i);
-                    if (c.getRank().equals(rank))
-                        newH.add(c);
+            int d = 0;
+            while (d < 1 || d > 2){
+                System.out.println("Do you want to say you're playing with 1. " 
+                        + b.getRank() + " or 2. " + b.getRank().getNext());
+                if (sc.hasNextInt()){
+                    d = sc.nextInt();
+                } else {
+                    System.out.println("Not a number.");
+                    sc.nextLine();
                 }
             }
+            if (d == 1){
+                rank = b.getRank();
+            } else {
+                rank = b.getRank().getNext();
+            }
+            
+            return new Bid(newH, rank);
         }
         
-            
-        // Show "You're playing.. no of cards + rank
-        System.out.println("You're playing: ");
-        System.out.println(newH);
+        // If not cheating 
+        System.out.println("You're not cheating.");
         
-        // Remove played bid from hand
-        h.remove(newH);
+        Hand hToRemove = new Hand();
+        // Prepare hand by removing cards not gonna be used
+        for (Card c : h){
+            if (!c.getRank().equals(b.getRank()) && 
+                        !c.getRank().equals(b.getRank().getNext()))
+                hToRemove.add(c);
+        }
+        // Remove
+        h.remove(hToRemove);
+        System.out.println("This is your playable hand: ");
+        System.out.println(h);
+        
+        int maxCards = maxBiddingNoCheatHand(h, b);
+            
+        while (newH.size() < maxCards){
+            int chosenCard = h.size(); 
+            while (chosenCard >= h.size()){
+                System.out.println("Cards left to choose: ");
+                for (int i = 0; i < h.size(); i++){
+                        System.out.println(i + ". " + h.getCards().get(i));
+                    }
+                if (newH.size() < 1)
+                    System.out.println("Select your first bidding card:");
+                else 
+                    System.out.println("Select next card to add: ");
+
+
+                if(sc.hasNextInt()){
+                    // You can only choose between b.rank and b.rank.next
+                    chosenCard = sc.nextInt();
+                    while (chosenCard > h.size() || chosenCard < 0){
+                        System.out.println("Try again:");
+                        if (sc.hasNextInt())
+                            chosenCard = sc.nextInt();
+                        else {
+                            System.out.println("Not a number!");
+                            sc.nextLine();
+                        }
+                    }
+                    //Card c = h.getCards().get(chosenCard);
+                }else{
+                   System.out.println("Not a number");
+                   sc.nextLine();
+                }
+            }
+            
+            // Add the chosen card
+            newH.add(h.getCards().get(chosenCard));
+            if (newH.size() == maxCards){
+                h.add(newH);
+            }
+            rank = h.getCards().get(chosenCard).getRank();
+            h.getCards().remove(chosenCard);
+        }
+        
         return new Bid(newH, rank);
     }
-
-        
-        
-
+    
     @Override
     public boolean callCheat(Hand h, Bid b) {
-        // Ask whether to call cheat
+        System.out.println("Do you want to call cheat? ");
+        
+        System.out.println("1 for yes, 2 for no: ");
+        int chose = 0;
+        while (chose < 1 || chose > 2){
+            if (sc.hasNextInt()){
+                chose = sc.nextInt();
+            } else {
+                System.out.println("Try again: ");
+                sc.nextLine();
+            }
+        }
+        
+        if (chose == 1)
+            return true;
+        
         return false;
+    }
+    
+    public int maxBiddingCheatHand(Hand h){
+        int maxCards = 0;
+        while (maxCards < 1 || maxCards > 4){
+            System.out.println("How many cards do you want to play?: ");
+            if(sc.hasNextInt()){
+                    maxCards = sc.nextInt();
+            }else{
+               System.out.println("Not a number");
+               sc.nextLine();
+            }
+        }
+        return maxCards;
+    }
+    
+    public int maxBiddingNoCheatHand(Hand h, Bid b){
+        int maxCards = 0;
+        while (maxCards < 1 || maxCards > h.countRank(b.getRank()) + h.countRank(b.getRank().getNext())){
+            System.out.println("How many cards do you want to play?: ");
+            if(sc.hasNextInt()){
+                    maxCards = sc.nextInt();
+            }else{
+               System.out.println("Not a number");
+               sc.nextLine();
+            }
+        }
+        return maxCards;
     }
     
 }

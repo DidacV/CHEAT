@@ -293,7 +293,7 @@ public class Hand implements Serializable, Iterable<Card>{
     public String toString(){
         StringBuilder sb = new StringBuilder();
         for (Card c : this.cards){
-            sb.append(c.toString());
+            sb.append(c.toString()).append("\n");
         }
         sb.append("-------------------");
         return sb.toString();
