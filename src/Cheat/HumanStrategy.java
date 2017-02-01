@@ -55,6 +55,7 @@ public class HumanStrategy implements Strategy{
             
             // Let player choose
             while (newH.size() < maxCards){
+                // enter the while
                 int chosenCard = h.size(); 
                 while (chosenCard >= h.size()){
                     
@@ -85,7 +86,7 @@ public class HumanStrategy implements Strategy{
                         h.add(newH);
                         newH.getCards().clear();
                         System.out.println("Playing this wouldn't be cheating!");
-                    } 
+                    }
                 }
                 h.getCards().remove(chosenCard);
             }
@@ -111,21 +112,53 @@ public class HumanStrategy implements Strategy{
         
         // If not cheating 
         System.out.println("You're not cheating.");
+        int d=0;
         
-        Hand hToRemove = new Hand();
-        // Prepare hand by removing cards not gonna be used
-        for (Card c : h){
-            if (!c.getRank().equals(b.getRank()) && 
-                        !c.getRank().equals(b.getRank().getNext()))
-                hToRemove.add(c);
+        if (h.countRank(b.r) > 0 && h.countRank(b.getRank().getNext()) > 0){
+            while (d < 1 || d > 2){
+                System.out.println("Would you like to play with 1. "
+                    + b.getRank() + " or 2. " + b.getRank().getNext());
+                if (sc.hasNextInt()){
+                    d = sc.nextInt();
+                } else{
+                    System.out.println("Not a number.");
+                    sc.nextLine();
+                }
+            }
+            Hand hToRemove = new Hand();
+            if (d == 1){
+                // Prepare hand by removing cards not gonna be used
+                for (Card c : h){
+                    if (!c.getRank().equals(b.getRank()))
+                        hToRemove.add(c);
+                }
+                // Remove
+                h.remove(hToRemove);
+            } else {
+                // Prepare hand by removing cards not gonna be used
+                for (Card c : h){
+                    if (!c.getRank().equals(b.getRank().getNext()))
+                        hToRemove.add(c);
+                }
+                // Remove
+                h.remove(hToRemove);
+            }
+        } else {
+            Hand hToRemove = new Hand();
+            // Prepare hand by removing cards not gonna be used
+            for (Card c : h){
+                if (!c.getRank().equals(b.getRank()) && 
+                            !c.getRank().equals(b.getRank().getNext()))
+                    hToRemove.add(c);
+            }
+            // Remove
+            h.remove(hToRemove);
         }
-        // Remove
-        h.remove(hToRemove);
+        
         System.out.println("This is your playable hand: ");
         System.out.println(h);
         
         int maxCards = maxBiddingNoCheatHand(h, b);
-            
         while (newH.size() < maxCards){
             int chosenCard = h.size(); 
             while (chosenCard >= h.size()){
@@ -140,7 +173,6 @@ public class HumanStrategy implements Strategy{
 
 
                 if(sc.hasNextInt()){
-                    // You can only choose between b.rank and b.rank.next
                     chosenCard = sc.nextInt();
                     while (chosenCard > h.size() || chosenCard < 0){
                         System.out.println("Try again:");
@@ -157,14 +189,12 @@ public class HumanStrategy implements Strategy{
                    sc.nextLine();
                 }
             }
-            
-            // Add the chosen card
             newH.add(h.getCards().get(chosenCard));
-            if (newH.size() == maxCards){
+            if(newH.size() == maxCards){
                 h.add(newH);
             }
-            rank = h.getCards().get(chosenCard).getRank();
-            h.getCards().remove(chosenCard);
+            Card c = h.remove(chosenCard);
+            rank = c.getRank();
         }
         
         return new Bid(newH, rank);
